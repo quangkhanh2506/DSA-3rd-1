@@ -45,11 +45,39 @@ public:
         size--;
     }
 
-    void max_sort() {
+    void max_sort(int num) {
         if (isEmpty()) {
+            cout<<"Empty"<<endl;
             return;
         }
         table* sort = front;
+        if(num>0 && num<=size){
+            while (sort->next!=NULL && num>0)
+            {
+                table* trans=sort->next;
+                while (trans!=NULL)
+                {
+                    if(trans->age>sort->age){
+                        int tempAge=sort->age;
+                        string tempName=sort->name;
+                        sort->age=trans->age;
+                        sort->name=trans->name;
+                        trans->age=tempAge;
+                        trans->name=tempName;
+                    }
+                    trans=trans->next;
+                }
+                sort=sort->next;
+                num--;
+            }
+            while (sort->next!=NULL)
+            {
+                sort=sort->next;
+            }
+            rear=sort;
+            return;
+            
+        }
         while (sort->next!=NULL)
         {
             table* trans=sort->next;
@@ -102,8 +130,6 @@ public:
         
     }
 };
-
-
 
 ///////////////////////////////End queue//////////////////////////////////////
 
@@ -164,7 +190,9 @@ void PQ(Queue* waitline, int num){
     waitline->display(num);
 }
 
-
+void SQ(Queue* waitline, int num){
+    waitline->max_sort(num);
+}
 
 void simulate(string filename, restaurant* r)
 {
@@ -198,7 +226,7 @@ void simulate(string filename, restaurant* r)
             }
         }
         else if(token=="SQ"){
-           
+           SQ(Waitline,stoi(myText));
         }
         else if(token == "PT"){
             
