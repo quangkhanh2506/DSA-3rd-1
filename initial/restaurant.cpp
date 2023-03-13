@@ -37,7 +37,6 @@ public:
 
     void dequeue() {
         if (isEmpty()) {
-            cout << "Queue is empty." << endl;
             return;
         }
         table* temp = front;
@@ -48,35 +47,59 @@ public:
 
     void max_sort() {
         if (isEmpty()) {
-            cout << "Queue is empty." << endl;
             return;
         }
-        table* trans=front->next;
-        table* sort=front;
-        while(trans!=NULL){
-            table* repSort=sort;
-            while (repSort->age!=trans->age && repSort->name!=trans->name)
-            {
-                if(repSort->age<trans->age){
-                    int temp=repSort->age;
-                    string tempName=repSort->name;
-                    repSort->age=trans->age;
-                    trans->age=temp;
-                    repSort->name=trans->name;
-                    trans->name=tempName;
-                }
-                repSort=repSort->next;
-            }
-            trans=trans->next;   
-        }
-        delete trans;
+        table* sort = front;
         while (sort->next!=NULL)
         {
+            table* trans=sort->next;
+            while (trans!=NULL)
+            {
+                if(trans->age>sort->age){
+                    int tempAge=sort->age;
+                    string tempName=sort->name;
+                    sort->age=trans->age;
+                    sort->name=trans->name;
+                    trans->age=tempAge;
+                    trans->name=tempName;
+                }
+                trans=trans->next;
+            }
             sort=sort->next;
         }
-        rear = sort; 
-        sort=sort->next;
-        delete sort;
+        rear=sort;
+    }
+    void display(int num) {
+        if (isEmpty()) {
+            cout << "Empty" << endl;
+            return;
+        }
+        if(num==-1){
+            table* curr = front;
+            while (curr != NULL) {
+                cout << curr->name << endl;
+                curr = curr->next;
+            }
+            return;
+        }
+        if(num <= size && num>0){
+            table* curr = front;
+            while (num>0) {
+                cout << curr->name << endl;
+                curr = curr->next;
+                num--;
+            }
+            return;
+        }
+        if(num>size&&num<MAXSIZE){
+            table* curr = front;
+            while (curr != NULL) {
+                cout << curr->name << endl;
+                curr = curr->next;
+            }
+            return;
+        }
+        
     }
 };
 
@@ -137,7 +160,9 @@ void REG(restaurant* R, string data,Queue* waitline){
     }
 }
 
-
+void PQ(Queue* waitline, int num){
+    waitline->display(num);
+}
 
 
 
@@ -164,7 +189,13 @@ void simulate(string filename, restaurant* r)
             
         }
         else if(token=="PQ"){
-           
+            if(myText=="PQ"){
+                PQ(Waitline,-1);
+            }
+            else {
+                int NUM=stoi(myText);
+                PQ(Waitline,NUM);
+            }
         }
         else if(token=="SQ"){
            
