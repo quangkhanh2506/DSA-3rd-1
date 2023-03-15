@@ -1,7 +1,25 @@
 #include "main.h"
 
 //Start stack
-
+class Stack{
+public:
+    table* top;
+    Stack* next;
+public:
+    Stack() {
+        top = NULL;
+    }
+    void pushForMerge(table* value) {
+        table* newNode = new table(value->ID,value->name,value->age,value->next);
+        newNode->next = top;
+        top = newNode;
+    }
+    void push(table* value) {
+        table* newNode = new table(value->ID,value->name,value->age,0);
+        newNode->next = top;
+        top = newNode;
+    }
+};
 
 ///////////////////////////////End stack////////////////////////////////////
 
@@ -185,6 +203,9 @@ void REG(restaurant* R, string data,Queue* waitline){
         }
     }
 }
+void REGM(){
+
+}
 
 void PQ(Queue* waitline, int num){
     waitline->display(num);
@@ -201,7 +222,19 @@ void simulate(string filename, restaurant* r)
     string myText;
     ifstream MyReadFile(filename);
     restaurant* assignment = new restaurant();
-    
+
+    Stack* clientComing;
+
+    table* closestTick; // đánh dấu bàn có hoạt động gần nhất
+
+    Stack* checkTable = new Stack();
+    table* temp=r->recentTable->next;
+    for (int i = 1; i <= MAXSIZE; i++)
+    {
+        checkTable->pushForMerge(temp);
+        temp = temp->next;
+    }
+
     while (getline (MyReadFile, myText)) {
         string token = slipt(myText);
         if(token=="REG"){
